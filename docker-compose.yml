@@ -1,0 +1,44 @@
+services:
+  db:
+    image: mysql:5.7.30
+    #restart: always
+    volumes:
+      - ~/atlassian/db_home/data:/var/lib/mysql
+      - ~/atlassian/db_home/conf:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: lmqjjcrtsx@9
+
+  adminer:
+    image: adminer
+    #restart: always
+    ports:
+      - 13307:8080
+  jira-srv:
+    build:
+      context: ./
+      dockerfile: Dockerfile-jira
+    image: timelyrain/jira
+    restart: always
+    ports:
+      - 4050:8080
+    environment:
+      - 'JVM_SUPPORT_RECOMMENDED_ARGS=-javaagent:/atlassian-agent.jar'
+      - 'JVM_MAXIMUM_MEMORY=2g'
+      - 'JVM_RESERVED_CODE_CACHE_SIZE=1g'
+    volumes:
+      - ~/atlassian/jira_home:/var/atlassian/application-data/jira
+  confluence-srv:
+    build:
+      context: ./
+      dockerfile: Dockerfile-confluence
+    image: timelyrain/confluence
+    #restart: always
+    ports:
+      - '8090:8090'
+    environment:
+      - 'JVM_SUPPORT_RECOMMENDED_ARGS=-javaagent:/atlassian-agent.jar'
+      - 'JVM_MAXIMUM_MEMORY=2g'
+      - 'JVM_RESERVED_CODE_CACHE_SIZE=1g'
+    volumes:
+      - ~/atlassian/confluence_home:/var/atlassian/application-data/confluence
+

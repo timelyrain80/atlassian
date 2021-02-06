@@ -1,0 +1,4 @@
+FROM atlassian/confluence-server:latest
+
+COPY ./jar/atlassian-agent.jar /atlassian-agent.jar
+COPY ./jar/mysql-connector-java-5.1.48.jar /opt/atlassian/confluence/confluence/WEB-INF/lib
